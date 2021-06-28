@@ -58,7 +58,7 @@ const Canvas = ({
           imageResizeRatio,
           setPreviewPaneDimensions
         )
-        applyFilter(cv, canvasRef.current, opts.filterCvParams)
+        //applyFilter(cv, canvasRef.current, opts.filterCvParams)
         if (opts.preview) {
           setMode('preview')
         }
