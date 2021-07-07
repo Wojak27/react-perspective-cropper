@@ -77,6 +77,9 @@ const App = () => {
           image={img}
           onChange={onChange}
           onDragStop={onDragStop}
+          pointBorder={"4px solid rgb(0,0,0)"}
+
+          lineColor={"rgb(0,0,0)"}
           maxWidth={window.innerWidth - 10}
         />
         {cropState?.loading && <Spin />}

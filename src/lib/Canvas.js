@@ -236,17 +236,38 @@ const Canvas = ({
 
     // TODO we should make those 5, 10 and 20 values proportionate
     // to the point size
+
+    const magnifierSize ={
+      height:pointSize + 20,
+      width:pointSize + 20
+    }
+
+    const dSize = {
+      dWidth: pointSize + 5,
+      dHeight: pointSize + 5
+    }
+
+    const topLeftPosition = {
+      x:(x+magnifierSize.width+dSize.dWidth)>magnCtx.canvas.width? x-magnifierSize.width-20:x+20,
+      y:(y+magnifierSize.height+dSize.dHeight)>magnCtx.canvas.height? y-magnifierSize.height-20:y + 20
+    }
+    console.log(magnCtx)
     magnCtx.drawImage(
       previewCanvasRef.current,
       x - (pointSize - 10),
       y - (pointSize - 10),
-      pointSize + 5,
-      pointSize + 5,
-      x + 10,
-      y - 90,
-      pointSize + 20,
-      pointSize + 20
+      dSize.dWidth,
+      dSize.dHeight,
+      topLeftPosition.x,
+      topLeftPosition.y,
+      magnifierSize.height,
+      magnifierSize.width
     )
+    magnCtx.fillStyle = "#000000";
+    magnCtx.fillRect(topLeftPosition.x+magnifierSize.height/2,topLeftPosition.y+magnifierSize.width/2,2,2);
+    magnCtx.beginPath();
+    magnCtx.rect(topLeftPosition.x, topLeftPosition.y, magnifierSize.height, magnifierSize.width);
+    magnCtx.stroke();
 
     setCropPoints((cPs) => ({ ...cPs, [area]: { x, y } }))
   }, [])
@@ -301,7 +322,7 @@ const Canvas = ({
             style={{
               position: 'absolute',
               zIndex: 5,
-              pointerEvents: 'none'
+              pointerEvents: 'none',
             }}
             width={previewDims.width}
             height={previewDims.height}
@@ -311,7 +332,8 @@ const Canvas = ({
       )}
 
       <canvas
-        style={{ zIndex: 5, pointerEvents: 'none' }}
+        style={{ zIndex: 5, 
+          pointerEvents: 'none' }}
         ref={previewCanvasRef}
       />
     </div>
