@@ -129,7 +129,30 @@ const Canvas = ({
     dst.delete()
   }
 
+  const getDefaultCropPoints = () => {
+    console.log("getDefaultCropPoints")
+    const dst = cv.imread(canvasRef.current)
+    
+    const rect = {
+      width: dst.cols * imageResizeRatio,
+      height: dst.rows * imageResizeRatio
+    }
+    console.log(rect)
+    const contourCoordinates = {
+      'left-top': { x: 0, y: 0 },
+      'right-top': { x: rect.width, y: 0 },
+      'right-bottom': {
+        x: rect.width,
+        y: rect.height
+      },
+      'left-bottom': { x: 0, y: rect.height }
+    }
+
+    setCropPoints(contourCoordinates)
+  }
+
   const detectContours = () => {
+    console.log("Detect contours")
     const dst = cv.imread(canvasRef.current)
     const ksize = new cv.Size(5, 5)
     // convert the image to grayscale, blur it, and find edges in the image
@@ -156,6 +179,7 @@ const Canvas = ({
       rect[key] = rect[key] * imageResizeRatio
     })
 
+
     const contourCoordinates = {
       'left-top': { x: rect.x, y: rect.y },
       'right-top': { x: rect.x + rect.width, y: rect.y },
@@ -165,6 +189,8 @@ const Canvas = ({
       },
       'left-bottom': { x: rect.x, y: rect.y + rect.height }
     }
+
+    console.log(contourCoordinates)
 
     setCropPoints(contourCoordinates)
   }
@@ -190,7 +216,8 @@ const Canvas = ({
       const src = await readFile(image)
       await createCanvas(src)
       showPreview()
-      detectContours()
+      //detectContours() //  if you want to detect contour automatically
+      getDefaultCropPoints() // if you just want to get the cropping points in each corner
       setLoading(false)
     }
 
